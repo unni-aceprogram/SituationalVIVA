@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Select Quiz</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: 'Inter', Arial, sans-serif;
+      background: linear-gradient(120deg, #e3f6f5 0%, #ffe8d6 100%);
+      min-height: 100vh;
+      margin: 0; padding: 0;
+      color: #23395d;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .quiz-list-container {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(34,57,93,0.15);
+      padding: 40px 30px;
+      width: 340px;
+      max-width: 95vw;
+      text-align: center;
+    }
+
+    h1 {
+      color: #207bfa;
+      font-weight: 700;
+      margin-bottom: 30px;
+      font-size: 2em;
+    }
+
+    .quiz-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      margin: 11px auto;
+      padding: 15px 0;
+      font-size: 1.07em;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(90deg, #207bfa 0%, #43cea2 100%);
+      color: #fff;
+      box-shadow: 0 3px 10px rgba(34,57,93,0.08);
+      transition: background 0.25s;
+      cursor: pointer;
+      outline: none;
+      text-decoration: none;
+      position: relative;
+    }
+
+    .quiz-btn:hover {
+      background: linear-gradient(90deg, #43cea2 0%, #207bfa 100%);
+    }
+
+    .locked::after {
+      content: "🔒";
+      position: absolute;
+      right: 15px;
+      font-size: 1.2em;
+    }
+
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-5px); }
+      100% { transform: translateX(0); }
+    }
+
+    .shake {
+      animation: shake 0.3s;
+    }
+
+    @media screen and (max-width: 500px) {
+      .quiz-list-container {
+        padding: 30px 20px;
+        width: 90%;
+      }
+
+      h1 {
+        font-size: 1.6em;
+      }
+
+      .quiz-btn {
+        padding: 13px 0;
+        font-size: 1em;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="quiz-list-container">
+  <h1>Choose a Viva</h1>
+  <a class="quiz-btn" href="SV1.html">Situational Viva 1</a>
+  <a class="quiz-btn locked" href="#">Situational Viva 2</a>
+  <a class="quiz-btn locked" href="#">Situational Viva 3</a>
+  <a class="quiz-btn locked" href="#">Situational Viva 4</a>
+</div>
+
+<script>
+  // Select all locked buttons
+  const lockedButtons = document.querySelectorAll('.quiz-btn.locked');
+
+  lockedButtons.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault(); // Prevent navigation
+      btn.classList.add('shake');
+      // Remove shake class after animation ends to allow repeated shake
+      setTimeout(() => btn.classList.remove('shake'), 300);
+    });
+  });
+</script>
+</body>
+</html>

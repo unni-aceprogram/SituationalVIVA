@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap">
+<meta charset="UTF-8" />
+<title>Situational MCQs</title>
+<style>
+/* ===============================
+   Base Styles
+================================= */
+body {
+    font-family: 'Inter', Arial, sans-serif;
+    background: linear-gradient(135deg, #e3f6f5 0%, #ffe8d6 100%);
+    color: #23395d;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+/* ===============================
+   Container
+================================= */
+.container {
+    width: 95%;
+    max-width: 520px;
+    margin: 50px auto 0 auto;
+    background: #ffffff;
+    border-radius: 24px;
+    box-shadow: 0 12px 32px rgba(34, 57, 93, 0.15);
+    padding: 36px 28px;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.container:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 40px rgba(34, 57, 93, 0.2);
+}
+
+/* ===============================
+   Headings
+================================= */
+h1 {
+    font-size: 2.4em;
+    color: #207bfa;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 14px;
+    text-align: center;
+}
+
+/* ===============================
+   Progress Bar
+================================= */
+#progress-container {
+    width: 100%;
+    background: #e9ecef;
+    height: 14px;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 14px;
+}
+
+#progress-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #207bfa 0%, #43cea2 100%);
+    transition: width 0.5s ease;
+    border-radius: 8px;
+}
+
+/* ===============================
+   Question Counter
+================================= */
+#question-counter {
+    font-size: 1.15em;
+    font-weight: 600;
+    color: #525252;
+    margin: 12px 0 20px 0;
+    text-align: center;
+}
+
+/* ===============================
+   Card Styles
+================================= */
+.card {
+    background: #f9f9fb;
+    padding: 32px 28px;
+    border-radius: 20px;
+    box-shadow: 0 4px 18px rgba(34, 57, 93, 0.08);
+    text-align: left;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(34, 57, 93, 0.12);
+}
+
+/* ===============================
+   Options / Labels
+================================= */
+.options label {
+    display: block;
+    background: #f5fafd;
+    font-size: 1.05em;
+    margin: 10px 0;
+    cursor: pointer;
+    padding: 12px 18px;
+    border-radius: 10px;
+    border: 2px solid #e3f6f5;
+    transition: all 0.3s ease;
+}
+
+.options label:hover {
+    background: #e0f0ff;
+    border-color: #207bfa;
+}
+
+.options input {
+    margin-right: 12px;
+}
+
+/* ===============================
+   Buttons
+================================= */
+.btn {
+    display: inline-block;
+    margin: 20px 10px 0 0;
+    padding: 14px 34px;
+    font-size: 1.15em;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(90deg, #207bfa 0%, #43cea2 100%);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(34, 57, 93, 0.1);
+    transition: background 0.3s, transform 0.2s;
+}
+
+.btn:hover {
+    background: linear-gradient(90deg, #43cea2 0%, #207bfa 100%);
+    transform: translateY(-2px);
+}
+
+/* ===============================
+   Correct / Wrong States
+================================= */
+.correct {
+    background: #e6ffed !important;
+    border-color: #43cea2 !important;
+    opacity: 0.8;
+    pointer-events: none;
+}
+
+.wrong {
+    background: #ffebef !important;
+    border-color: #fa205c !important;
+    opacity: 0.8;
+    pointer-events: none;
+}
+
+.disabled-option {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* ===============================
+   Timer
+================================= */
+.timer {
+    font-weight: bold;
+    margin-bottom: 16px;
+    font-size: 1.1em;
+    color: #207bfa;
+    text-align: center;
+}
+
+.timer.red {
+    color: #fa205c;
+}
+
+.timer.green {
+    color: #43cea2;
+}
+
+/* ===============================
+   Explanation Box
+================================= */
+.explanation {
+    margin-top: 20px;
+    padding: 14px 18px;
+    background: #f6f3e9;
+    border-left: 5px solid #43cea2;
+    border-radius: 0 10px 10px 0;
+    font-size: 1em;
+    color: #525252;
+}
+
+/* ===============================
+   Alerts / Messages
+================================= */
+#alert {
+    display: none;
+    font-size: 1.1em;
+    color: #fa205c;
+    letter-spacing: 0.5px;
+    margin: 8px 0;
+    font-weight: 700;
+    text-align: center;
+}
+
+#time-up-message {
+    font-size: 1.1em;
+    color: #fa205c;
+    font-weight: bold;
+    margin-top: 12px;
+}
+
+#sound-toggle {
+    margin: 20px 0;
+    cursor: pointer;
+    font-size: 1em;
+    color: #43cea2;
+    font-weight: 600;
+}
+
+/* ===============================
+   Score / Highlights
+================================= */
+#score-container {
+    margin-top: 24px;
+    text-align: center;
+}
+
+.highlight-latest-result {
+    font-size: 1.4em;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+    color: #207bfa;
+}
+
+</style>
+
+</head>
+<body>
+<div class="container">
+<h1>Situational MCQs</h1>
+<div id="sound-toggle" onclick="toggleSound()">
+<span id="sound-icon">🔊</span> <span id="sound-text">Sound ON</span>
+</div>
+<div id="progress-container"><div id="progress-bar"></div></div>
+<div id="question-counter">Questions: 25</div>
+<div id="alert">⏰ Hurry! Time is almost up!</div>
+<div id="quiz-container"></div>
+<div id="score-container"></div>
+<button id="start-button" class="btn">Start Quiz</button>
+</div>
+ <audio id="correct-sound" src="https://dm0qx8t0i9gc9.cloudfront.net/watermarks/audio/B4CWlP_CIkc1kju2x/audioblocks-feedback-correct-07_HiQUhCpDv_WM.mp3" preload="auto"></audio>
+<audio id="wrong-sound" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+const quizData = [
+  {
+    question: "A customer for a London-bound flight presents an expired passport but insists they have a renewal confirmation email. What should you do?",
+    options: [
+      "Allow check-in if they have the confirmation email",
+      "Request airline approval before issuing boarding pass",
+      "Deny check-in until valid travel document is presented",
+      "Contact immigration directly and let them decide"
+    ],
+    correct: 2,
+    explanation: "Airlines are responsible for ensuring customers meet entry requirements; expired documents cannot be accepted for travel."
+  },
+  {
+    question: "Your flight is overbooked by four seats. Which approach best demonstrates professionalism and customer care?",
+    options: [
+      "Announce compensation loudly at the counter",
+      "Randomly deny boarding to the last checked-in customers",
+      "Ask the flight crew to decide who to offload",
+      "Quietly identify flexible customers and offer benefits discreetly"
+    ],
+    correct: 3,
+    explanation: "Handling overbooking discreetly and respectfully maintains customer goodwill and prevents crowd escalation."
+  },
+  {
+    question: "A connecting customer arrives with no baggage tag receipt but claims their bag was checked through. What should you do?",
+    options: [
+      "Dismiss the claim until proof is shown",
+      "Log a delayed baggage report and cross-check in WorldTracer",
+      "Ask them to contact their previous airline",
+      "Tell them to wait for all bags to arrive"
+    ],
+    correct: 1,
+    explanation: "Filing a report immediately allows tracking through baggage tracing systems and prevents data loss."
+  },
+  {
+    question: "A customer to Dubai presents a visa that expires the same day they arrive. What should you do?",
+    options: [
+      "Check them in normally—entry decision rests with immigration",
+      "Refuse check-in and refer to airline duty officer",
+      "Let them board if they sign a liability waiver",
+      "Call the consulate for immediate confirmation"
+    ],
+    correct: 0,
+    explanation: "Airline check-in staff must prevent inadmissible customers from boarding to avoid penalties. Ensure the customer has ample time to clear immigration upon arrival."
+  },
+  {
+    question: "A customer with wheelchair assistance arrives late for boarding, and the flight is closing. What should you do?",
+    options: [
+      "Deny boarding to avoid delaying the flight",
+      "Ask the customer to wait for the next flight",
+      "Call security to expedite screening",
+      "Escort and coordinate with gate to ensure safe boarding"
+    ],
+    correct: 3,
+    explanation: "Customers with reduced mobility have boarding priority; coordination ensures dignity and safety."
+  },
+  {
+    question: "You notice an unattended bag near the airport café. What’s your correct response?",
+    options: [
+      "Open it to check for identification",
+      "Move it away from the public area",
+      "Notify airport security immediately and isolate the area",
+      "Ignore it unless someone reports it"
+    ],
+    correct: 2,
+    explanation: "Staff must never handle suspicious baggage; security protocols require immediate notification."
+  },
+  {
+    question: "A customer starts shouting because their flight is delayed due to weather. What’s the first step?",
+    options: [
+      "Tell them to calm down immediately",
+      "Explain weather delays are beyond control",
+      "Listen actively and acknowledge their frustration",
+      "Ask security to escort them away"
+    ],
+    correct: 2,
+    explanation: "Active listening helps de-escalate emotion before providing factual information."
+  },
+  {
+    question: "A single adult wishes to travel with two infants. What should you do?",
+    options: [
+      "Allow travel since the adult is accompanying them",
+      "Ask for proof of relationship or parental consent",
+      "Deny boarding immediately",
+      "Contact cabin crew to verify at the gate"
+    ],
+    correct: 2,
+    explanation: "Only one infant per adult is permitted. Only one infant is allowed in a row."
+  },
+  {
+    question: "A single adult is traveling with two children of different surnames and no consent letter. What should you do?",
+    options: [
+      "Allow travel since the adult is accompanying them",
+      "Ask for proof of relationship or parental consent",
+      "Deny boarding immediately",
+      "Contact cabin crew to verify at the gate"
+    ],
+    correct: 1,
+    explanation: "It is not mandatory to carry a consent letter. However, it is highly recommended to carry proof of relationship and valid photo IDs to avoid issues during travel. Documentation must be verified to prevent child trafficking or custody violations."
+  },
+  {
+    question: "A flight cancellation causes a queue of 100 angry customers. What’s your best initial step?",
+    options: [
+      "Provide clear, frequent updates and set up queuing control",
+      "Wait for a manager before making announcements",
+      "Allow customers to crowd the counter",
+      "Focus only on IndiGo STRETCH customers"
+    ],
+    correct: 0,
+    explanation: "Transparent, consistent communication prevents chaos and maintains order."
+  },
+  {
+    question: "A non-English-speaking customer cannot understand gate change announcements. What’s best practice?",
+    options: [
+      "Ignore them—they’ll see others move",
+      "Use visual displays or translation tools",
+      "Ask another customer to translate unofficially",
+      "Wait until boarding starts"
+    ],
+    correct: 1,
+    explanation: "Visual and multilingual tools ensure accessibility and inclusivity in communication."
+  },
+  {
+    question: "A child approaches you crying and lost. What should you do first?",
+    options: [
+      "Take them to the airline lounge",
+      "Announce the name over the PA system",
+      "Escort them to the nearest police desk",
+      "Inform airport security and stay with the child"
+    ],
+    correct: 3,
+    explanation: "Security must handle reunification; stay with the child until authorized help arrives."
+  },
+  {
+    question: "A customer refuses to gate-check an oversized bag, insisting it fit on the last flight. What should you do?",
+    options: [
+      "Force them to comply",
+      "Explain policy differences and offer to tag it for safe return",
+      "Let them try to fit it onboard",
+      "Ask the purser to handle it"
+    ],
+    correct: 1,
+    explanation: "Professional explanation with empathy enforces policy while maintaining respect."
+  },
+  {
+    question: "A CIP customer arrives after check-in closes but before boarding ends. What should you do?",
+    options: [
+      "Reopen the flight immediately",
+      "Check with Terminal MOD for possible exception",
+      "Deny travel regardless of status",
+      "Let them proceed to the gate unchecked"
+    ],
+    correct: 1,
+    explanation: "Exceptions require coordination to ensure compliance with safety and load limits."
+  },
+  {
+    question: "A customer asks to see another traveler’s flight details. What should you do?",
+    options: [
+      "Provide basic info since it’s a relative",
+      "Check if they have consent by phone",
+      "Deny and explain privacy regulations",
+      "Ask your supervisor if it’s allowed"
+    ],
+    correct: 2,
+    explanation: "Data protection laws prohibit sharing customer details without explicit consent."
+  },
+  {
+    question: "The airline system is down, and check-in must continue manually. What’s the priority?",
+    options: [
+      "Stop all processing",
+      "Wait until the system returns",
+      "Let customers board without check-in",
+      "Issue manual boarding passes and coordinate seat control"
+    ],
+    correct: 3,
+    explanation: "Manual fallback ensures operational continuity and customer record integrity."
+  },
+  {
+    question: "A customer’s baggage arrives on the next flight. What’s the correct handling?",
+    options: [
+      "Call the customer and deliver the bag after customs clearance",
+      "Leave the bag at baggage hall",
+      "Send it to lost & found only",
+      "Load it onto another random flight"
+    ],
+    correct: 0,
+    explanation: "Delayed baggage must be delivered directly to the customer after customs clearance."
+  },
+  {
+    question: "A tour leader demands priority boarding for their group of 50. What should you do?",
+    options: [
+      "Refuse outright—rules are rules",
+      "Negotiate discreetly, balancing schedule and satisfaction",
+      "Allow it immediately to calm them",
+      "Ask the captain for a decision"
+    ],
+    correct: 1,
+    explanation: "Negotiation balances operational efficiency with customer service diplomacy."
+  },
+  {
+    question: "A person without a valid AEP requests that you inform CISF so they can be escorted into a staff-only area. What should you do?",
+    options: [
+      "Allow entry if you recognize them",
+      "Deny access and inform airport security",
+      "Escort them temporarily",
+      "Check credentials after entry"
+    ],
+    correct: 1,
+    explanation: "Unverified access breaches security protocols; only authorized, badged personnel are allowed."
+  },
+  {
+    question: "A customer misses their flight due to arriving late at security. What should you do?",
+    options: [
+      "Offer hotel accommodation",
+      "N-move, otherwise advise re-schedule",
+      "Blame airport security",
+      "Upgrade them on the next flight"
+    ],
+    correct: 1,
+    explanation: "Nmove if D-75 applies and seats are available, or apply fare rules consistently; missed flights for personal delay are the customer’s responsibility."
+  },
+  {
+    question: "A customer collapses at check-in showing flu-like symptoms. What’s your first step?",
+    options: [
+      "Provide first aid yourself",
+      "Call medical response and isolate area",
+      "Ask them to sit and wait",
+      "Let them continue if they feel better"
+    ],
+    correct: 1,
+    explanation: "Medical response ensures proper care while reducing potential infection risk."
+  },
+  {
+    question: "A traveler claims their bag was stolen from the carousel. What should you do?",
+    options: [
+      "Call the police immediately",
+            "Search arrival belt personally for possible baggage swap",
+      "Ask for customers baggage tag, and alert IndiGo Security",
+      "Both B & C"
+    ],
+    correct: 3,
+    explanation: "Proper documentation and security involvement preserve evidence and procedure integrity."
+  },
+  {
+    question: "A customer traveling due to a family emergency requests expedited boarding. What should you do?",
+    options: [
+      "Offer empathetic listening and coordinate special handling",
+      "Refer them to a travel agent",
+      "Process normally",
+      "Ask for proof of emergency"
+    ],
+    correct: 0,
+    explanation: "Empathy and flexible support uphold service quality during compassionate cases."
+  },
+  {
+    question: "Ramp informs you last-minute that an offloaded customer’s bag is still inside holds and they are unable to locate it in the compartment. Boarding is complete, and ramp requests that you accept the passenger back on board. What should you do?",
+    options: [
+      "Accept the customer",
+      "Stop departure and inform duty manager immediately",
+      "Wait until aircraft pushes back",
+      "Tell cabin crew to inform captain after takeoff"
+    ],
+    correct: 0,
+    explanation: "Since baggage is tallied from ramp end, accept the passenger back onboard."
+  },
+  {
+    question: "Long queues form at all check-in counters after a network failure. What’s the best management action?",
+    options: [
+      "Let customers self-organize",
+      "Implement queue marshals and clear communication on expected delays",
+      "Close counters until system is restored",
+      "Allow only business-class customers to approach"
+    ],
+    correct: 1,
+    explanation: "Structured queue management and transparent updates prevent escalation and maintain order."
+  }
+];
+
+      
+    
+    let currentQuestion = 0;
+let score = 0;
+let timer;
+let timeLeft = 60;
+let soundOn = true;
+let soundEnabled = true;
+const userAnswers = [];
+const allResults = [];
+
+const quizContainer = document.getElementById("quiz-container");
+const scoreContainer = document.getElementById("score-container");
+const progressBar = document.getElementById("progress-bar");
+const questionCounter = document.getElementById("question-counter");
+const alertBox = document.getElementById("alert");
+const startButton = document.getElementById("start-button");
+const correctSound = document.getElementById("correct-sound");
+const wrongSound = document.getElementById("wrong-sound");
+
+function startQuiz() {
+currentQuestion = 0;
+score = 0;
+userAnswers.length = 0;
+quizStartTime = new Date(); 
+startButton.style.display = "none";
+scoreContainer.innerHTML = "";
+showQuestion();
+}
+
+function showQuestion() {
+clearInterval(timer);
+timeLeft = 60;
+updateTimer();
+alertBox.style.display = "none";
+const questionData = quizData[currentQuestion];
+quizContainer.innerHTML = `
+<div class="card">
+<div class="timer" id="timer">Time left: ${timeLeft}s</div>
+<h2>${questionData.question}</h2>
+<div class="options">
+${questionData.options.map((opt, i) =>
+`<label class=""><input type="radio" name="answer" value="${i}"> ${opt}</label>`
+).join("")}
+</div>
+<div id="warning-message"></div>
+<button class="btn" onclick="submitAnswer()">Submit</button>
+</div>
+`;
+questionCounter.textContent = `Question ${currentQuestion + 1} of ${quizData.length}`;
+progressBar.style.width = `${((currentQuestion) / quizData.length) * 100}%`;
+
+timer = setInterval(() => {
+timeLeft--;
+updateTimer();
+if (timeLeft <= 5) alertBox.style.display = "block";
+if (timeLeft === 0) submitAnswer(true);
+}, 1000);
+}
+
+function updateTimer() {
+const timerEl = document.getElementById("timer");
+if (!timerEl) return;
+timerEl.textContent = `Time left: ${timeLeft}s`;
+timerEl.className = "timer " + (timeLeft <= 5 ? "red" : "green");
+}
+
+
+function submitAnswer(auto = false) {
+    const selected = document.querySelector('input[name="answer"]:checked');
+    const questionData = quizData[currentQuestion];
+
+    if (!selected && !auto) {
+        const warning = document.getElementById("warning-message");
+        if (warning) warning.textContent = "⚠️ Please select an option before submitting.";
+        return;
+    }
+
+    clearInterval(timer);
+    alertBox.style.display = "none";
+
+    const warning = document.getElementById("warning-message");
+    if (warning) warning.textContent = "";
+
+    let isCorrect = false;
+
+    if (selected) {
+        const answer = parseInt(selected.value);
+        userAnswers[currentQuestion] = answer;
+        if (answer === questionData.correct) {
+            score++;
+            isCorrect = true;
+        }
+    } else {
+        userAnswers[currentQuestion] = null;
+    }
+
+    const optionsLabels = document.querySelectorAll(".options label");
+    optionsLabels.forEach((label, i) => {
+        label.classList.add("disabled");
+        const input = label.querySelector('input');
+        if (input) input.disabled = true;
+
+        if (i === questionData.correct) label.classList.add("correct");
+        else if (selected && i === parseInt(selected.value)) label.classList.add("wrong");
+    });
+
+    const submitBtn = quizContainer.querySelector("button.btn");
+    if (submitBtn) submitBtn.disabled = true;
+
+    // Add explanation and next button
+    quizContainer.innerHTML += `
+        <div class="explanation" id="explanation"><strong>Explanation:</strong> ${questionData.explanation}</div>
+        <button class="btn" onclick="nextQuestion()">Next</button>
+    `;
+
+    // Smooth scroll to explanation
+    const explanationEl = document.getElementById("explanation");
+    if (explanationEl) {
+        explanationEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    setTimeout(() => {
+        showResult(isCorrect);
+    }, 150);
+
+    progressBar.style.width = `${((currentQuestion + 1) / quizData.length) * 100}%`;
+
+    allResults[currentQuestion] = {
+        question: questionData.question.trim(),
+        selected: selected ? parseInt(selected.value) : null,
+        correct: questionData.correct,
+        options: questionData.options.map(o => o.trim()),
+        explanation: questionData.explanation.trim(),
+    };
+}
+
+
+
+function showResult(correct) {
+const sound = correct ? correctSound : wrongSound;
+sound.currentTime = 0;
+if (soundEnabled) sound.play();
+
+if (correct) {
+confetti();
+setTimeout(() => {
+sound.pause();
+sound.currentTime = 0;
+}, 2400);
+}
+}
+
+function nextQuestion() {
+currentQuestion++;
+if (currentQuestion >= quizData.length) {
+showScore();
+} else {
+showQuestion();
+}
+}
+
+function showScore() {
+const endTime = new Date();
+const timeTaken = Math.floor((endTime - quizStartTime) / 1000); 
+const percentage = Math.round((score / quizData.length) * 100);
+const passed = percentage >= 90;
+
+quizContainer.innerHTML = "";
+questionCounter.textContent = `Quiz Completed!`;
+progressBar.style.width = "100%";
+
+let resultMessage = `
+<div class="highlight-latest-result">
+You scored ${score} out of ${quizData.length} (${percentage}%)
+<br><span style="color:${passed ? '#43cea2' : '#fa205c'}; font-weight:bold;">
+${passed ? "✅ Passed!" : "❌ Not Passed"}
+</span>
+</div>
+`;
+
+let buttonsHTML = `
+<div class="button-group">
+<button class="btn" onclick="startQuiz()">Restart Quiz</button>
+<button class="btn" onclick="toggleReview()">Review Answers</button>
+<button class="btn" onclick="downloadResultsPDF(${score}, ${quizData.length}, ${timeTaken})">Share Results</button>
+<button class="btn" onclick="goHome()">Homepage</button>
+</div>
+<div id="review-section"></div>
+`;
+
+scoreContainer.innerHTML = resultMessage + buttonsHTML;
+}
+
+function toggleReview() {
+const reviewSection = document.getElementById("review-section");
+if (reviewSection.innerHTML.trim() !== "") {
+reviewSection.innerHTML = "";
+} else {
+let resultsHTML = `<h3 style="text-align:center;">Review Your Answers:</h3>`;
+allResults.forEach((result, i) => {
+const userAnswerIndex = result.selected;
+const correctIndex = result.correct;
+resultsHTML += `
+<div class="card" style="margin-bottom:15px; text-align:left;">
+<strong>Q${i + 1}: ${result.question}</strong><br>
+Your answer: ${userAnswerIndex === null ? "No answer" : result.options[userAnswerIndex]} ${userAnswerIndex === correctIndex ? "✅" : "❌"}<br>
+Correct answer: ${result.options[correctIndex]}<br>
+<div class="explanation">${result.explanation}</div>
+</div>
+`;
+});
+reviewSection.innerHTML = resultsHTML;
+}
+}
+
+function downloadResultsPDF(score, total, timeTaken) {
+const { jsPDF } = window.jspdf;
+const doc = new jsPDF();
+const now = new Date();
+const formattedDate = now.toLocaleString();
+const percentage = Math.round((score / total) * 100) + "%";
+
+doc.setFont("helvetica", "bold");
+doc.setFontSize(16);
+doc.text("RST Practice Set Results", 20, 20);
+
+const headers = ["Date", "Score", "Time Taken"];
+const data = [[ formattedDate, `${score} / ${total} (${percentage})`, `${timeTaken} seconds` ]];
+
+const startX = 20;
+const startY = 30;
+const colWidths = [60, 60, 60];
+const rowHeight = 10;
+
+headers.forEach((header, i) => {
+doc.setFillColor(240, 240, 240);
+doc.rect(startX + colWidths.slice(0, i).reduce((a, b) => a + b, 0), startY, colWidths[i], rowHeight, 'FD');
+doc.setTextColor(0);
+doc.setFontSize(12);
+doc.text(header.trim(), startX + colWidths.slice(0, i).reduce((a, b) => a + b, 0) + 2, startY + 7);
+});
+
+data[0].forEach((text, i) => {
+const x = startX + colWidths.slice(0, i).reduce((a, b) => a + b, 0);
+const y = startY + rowHeight;
+doc.rect(x, y, colWidths[i], rowHeight); 
+doc.text(text.trim(), x + 2, y + 7);
+});
+
+doc.save("quiz_results.pdf");
+}
+
+function goHome() {
+window.location.href = "index.html";
+}
+function toggleSound() {
+soundOn = !soundOn;
+soundEnabled = soundOn;
+const icon = document.getElementById("sound-icon");
+const text = document.getElementById("sound-text");
+if (soundOn) {
+icon.textContent = "🔊";
+text.textContent = "Sound ON";
+} else {
+icon.textContent = "🔇";
+text.textContent = "Sound OFF";
+}
+}
+
+startButton.addEventListener("click", startQuiz);
+</script>
+</body>
+</html>
+
